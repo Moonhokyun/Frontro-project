@@ -1,7 +1,27 @@
 const iconBack = document.querySelector('.box-search > img');
 // console.log(iconBack);
 iconBack.addEventListener('click', () => {
-    history.back(); //이전페이지로 이동
+    history.back(); 
+})
+
+// footer 페이지이동
+const goToReload = document.querySelector('ul > li:first-child');
+const goToChat = document.querySelector('ul > li:nth-child(2)');
+const goUpload = document.querySelector('ul > li:nth-child(3)');
+const goMyProfile = document.querySelector('ul > li:last-child');
+
+// footer 페이지 이동 기능
+goToReload.addEventListener('click', () => {
+  window.location.href = "index.html";
+})
+goToChat.addEventListener('click', () => {
+  window.location.href = "chat_list.html";
+})
+goUpload.addEventListener('click', () => {
+  window.location.href = "upload.html";
+})
+goMyProfile.addEventListener('click', () => {
+  window.location.href = "my_profile.html";
 })
 
 const TEST_TOKEN = "Bearer " + localStorage.getItem("token")
@@ -46,7 +66,7 @@ const showResult = async (event) => {
   });
 
     const usernameList = document.querySelectorAll(".search_searched-word")
-    console.log(usernameList)
+    // console.log(usernameList)
     const searchInfo = document.querySelectorAll(".search_text-info")
     
 
@@ -60,9 +80,9 @@ const showResult = async (event) => {
     // }
 
     for (const username of usernameList) {
-        console.log(username)
+        // console.log(username)
         const authorAccountName = username.dataset.accountname;
-        console.log(authorAccountName)
+        // console.log(authorAccountName)
         username.addEventListener('click', () => {
             window.location.href = `your_profile.html?accountName=${authorAccountName}`;
         })
