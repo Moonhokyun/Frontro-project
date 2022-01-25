@@ -54,7 +54,6 @@
 }
 
 .main .post {
-    /* overflow: hidden; */
     margin: 2rem auto;
 }
 
@@ -68,7 +67,6 @@
     display: flex;
     margin-top: 0.8rem;
     justify-content: space-around;
-    /* justify-content: space-between; */
 }
 
 .item-footer {
@@ -86,59 +84,6 @@
     width: 25px;
     padding-left: 1rem;
 }
-
-/* 이미지 리스트 */
-/* .post-img-container {
-    position: relative;
-    margin-bottom: 16px;
-    max-height: 228px;
-    border-radius: 10px;
-    overflow: hidden;
-} */
-
-/* .post-img-container .post-img-list {
-    display: flex;
-    transition: all .4s;
-    transform: translateX(0px);
-}
-
-.post-img-list li{
-    min-width: 304px;
-    width: 100%;
-    max-height: 228px;
-    min-height: 228px;
-    border: 0.5px solid var(--border-color);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.post-container .post-img {
-    border-radius: 10px;
-    margin-bottom: 16px;
-    object-fit: cover;
-    height: 100%;
-} */
-
-/* .post-img-btn-list {
-    position: absolute;
-    display: flex;
-    gap: 6px;
-    left: 50%;
-    bottom: 16px;
-    transform: translateX(-50%);
-} */
-
-/* .post-img-btn-list button{
-    border-radius: 50%;
-    width: 4px;
-    cursor: pointer;
-    height: 12px;
-    border-style: none;
-} */
-
-/* .post-img-btn-list .second{
-    background-color: var(--zzin-no);
-} */
 
 /* 이미지 쪼마난 슬라이드  */
 .article-post__img {
@@ -171,16 +116,12 @@
     margin: 0;
     object-fit: cover;
     border-radius: 1rem;
-    /* scroll-snap-align: start;
-    overflow-x: auto;
-    white-space: nowrap; */
 }
 
 .article-post__img:hover,
 .article-post__img--slide:hover {
     outline: 1px solid #DBDBDB;
 }
-
 
 /* 업모달창 */
 .hidden-menu {
@@ -315,6 +256,7 @@
 
 .button-like {
     color: #767676;
+    cursor: pointer;
 }
 
 .count-heart {
@@ -325,13 +267,3 @@
 .icon-box .count {
     padding-top: 6px;
 }
-
-
-
-/* 
-.img-container {
-    display: flex;
-    width: 30.4rem;
-    height: 22.8rem;
-    margin: 1.6rem 0;
-} */

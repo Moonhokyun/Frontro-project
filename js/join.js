@@ -1,30 +1,22 @@
 // join 1: 이메일로 회원가입 폼 부분 선택
 const userEmailInput = document.querySelector('#inpEmail');
-// console.log(userEmailInput);
 const userPwInput = document.querySelector('#inputPw');
-// console.log(userPwInput);
 const nextBtn = document.querySelector('.next_btn');
-// console.log(nextBtn);
+
 // join2 : 프로필 설정 부분 선택 
 const startButton = document.querySelector('.start-btn');
 const warningTextList = document.querySelectorAll('.warning-text');
 const userNameInput = document.querySelector('#inpName');
-// console.log(userNameInput);
 const userIdInput = document.querySelector('#inpId');
-// console.log(userIdInput);
 const userIntro = document.querySelector('#inpIntroduce');
-// console.log(userIntro);
+
 // 화면 전환을 위한 section 선택 
 const $emailPw = document.querySelector(".email-pw")
-// console.log($emailPw);
 const $profile = document.querySelector(".profile-set")
-// console.log($profile);
 const $imagePre = document.querySelector("#imagePre")
-// console.log($imagePre);
 
 // const url = "http://146.56.183.55:5050";
 const url = "https://api.mandarin.cf";
-
 
 // 이메일 중복 체크 함수 
 async function checkEmailValid(email) {
@@ -64,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputAlert.fontSize = `1.2rem`
       }
     })
-  })
+})
 
 // 이메일로 회원가입 창에서 (다음) 버튼 눌렀을 때 
 // 통과하면 프로필 설정 창 띄우고 
@@ -80,7 +72,6 @@ nextBtn.addEventListener("click",async ()=>{
     }else{
         warningTextList[0].classList.remove('invisible');
     }
-
 })
 
 // 비밀번호 6자 이상 유효성 검사 함수 
@@ -105,7 +96,7 @@ userPwInput.addEventListener ('input', () => {
 })
 
 // 프로필 설정 폼 
-// 사용자 이름 :  2~10자 유효성 검사
+// 사용자 이름이 2~10자인지 유효성 검사
 const isUserNameInputValid = () => {
     const userName = userNameInput.value;
     if (userName.length < 2 || 10 < userName.length) {
@@ -140,7 +131,6 @@ startButton.addEventListener('click', () => {
         return;
     }
     warningTextList[2].classList.add('invisible');
-    // window.location.href = "login_email.html";
 })
 
 // input에 입력시 경고 띄워주기
@@ -198,19 +188,14 @@ function readImage(input) {
     }
 }
 
-// document.getElementById('profile-input').addEventListener('change', (e) => {
-//     readImage(e.target);
-// })
-
 document.querySelector('.profile-input').addEventListener('change', (e) => {
     readImage(e.target);
 })
 
-// 이미지 업로드
-
+// 이미지 업로드 
 async function imageUpload(files) {
     const formData = new FormData();
-    formData.append("image", files[0]);//formData.append("키이름","값")
+    formData.append("image", files[0]);    
     const res = await fetch(`https://api.mandarin.cf/image/uploadfile`, {
         method: "POST",
         body: formData
@@ -219,7 +204,6 @@ async function imageUpload(files) {
     const productImgName = data["filename"];
     return productImgName
 }
-
 
 async function profileImage(e) {
     const files = e.target.files
@@ -230,7 +214,7 @@ async function profileImage(e) {
 document.querySelector("#profile-input").addEventListener("change", profileImage)
 
 
-// 회원가입 fetch 연결/....
+// 회원가입 fetch 연결
 async function join() {
     const email = document.querySelector('#inpEmail').value;
     const password = document.querySelector('#inputPw').value;

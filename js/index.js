@@ -64,7 +64,7 @@ if (localStorage.getItem("Token")) {
 else {
     location.href = './login.html'
 }
-// console.log(localStorage.getItem("Token"))  //요거는 로컬스토리지에 값잘 있나 확인.
+// console.log(localStorage.getItem("Token"))  // 요거는 로컬스토리지에 값잘 있나 확인.
 
 async function getFeed() {
     // const url = "http://146.56.183.55:5050"
@@ -80,16 +80,11 @@ async function getFeed() {
         }
     })
     const json = await res.json()
-    console.log(json);
-
-    //forEach문으로 받아온 데이터 전부 살펴보면서 그려주는 부분
-    // 이미지 3장일 때 이미지 리스트
-    //  글만 있는 이미지 있는 경우
-
+    // console.log(json);
     const posts = json.posts
     const btnHeartList = [];
 
-    // 팔로우가 없는 경우 
+    // 팔로우가 없는 경우 그려줄 화면 
     if (posts.length == 0) {
         container.innerHTML += `
                 <div class="main-icon">
@@ -98,27 +93,28 @@ async function getFeed() {
                     <button class="btn-search btnYellow">검색하기</button>
                 </div>
         `;
-
+        // 검색하기 버튼 클릭 시 페이지 이동 
         const goToSearch = document.querySelector(".btnYellow");
-        console.log(goToSearch);
+        // console.log(goToSearch);
         goToSearch.addEventListener('click', () => {
             window.location.href = "search_2.html";
         })
+        // 팔로우가 있는 경우 그려줄 화면 
     } else {
         posts.forEach(post => {
-            console.log('post');
+            // console.log('post');
             const authorImage = post.author.image;
             const id = post.author._id;
             const authorAccount = post.author.accountname;
             const authorName = post.author.username;
             const commentCount = post.commentCount;
             const content = post.content;
-            // const heartCount = post.heartCount;
-            // const hearted = post.hearted;
+            const heartCount = post.heartCount;
+            const hearted = post.hearted;
             const updateDate = "" + post.updatedAt;
             const contentImage = post.image.split(',');
 
-            // 이미지 슬라이더 구현 
+            // 이미지가 1개인 경우와 1개 이상인 경우 다르게 렌더링 
             let imageHTML = '';
             if (contentImage.length === 1 && contentImage[0]) {
                 imageHTML = `<img src="${contentImage[0]}" alt="post-image" class="article-post__img">`
@@ -216,11 +212,11 @@ async function getFeed() {
 
         // 계정 아이디 클릭 시 해당 유저 프로필로 이동 
         const idList = document.querySelectorAll(".id")
-        console.log(idList)
+        // console.log(idList)
             for (const id of idList) {
-                console.log(id)
+                // console.log(id)
                 const authorAccountName = id.dataset.accountname;
-                console.log(authorAccountName)
+                // console.log(authorAccountName)
                 id.addEventListener('click', () => {
                     window.location.href = `your_profile.html?accountName=${authorAccountName}`;
                 })
@@ -228,11 +224,11 @@ async function getFeed() {
 
         // 프로필 사진 클릭 시 해당 유저 프로필로 이동 
         const imgPostList = document.querySelectorAll(".profile-pic")
-        console.log(imgPostList)
+        // console.log(imgPostList)
         for (const img of imgPostList) {
-            console.log(img)
+            // console.log(img)
             const authorAccountName = img.dataset.accountname;
-            console.log(authorAccountName)
+            // console.log(authorAccountName)
             img.addEventListener('click', () => {
                 window.location.href = `your_profile.html?accountName=${authorAccountName}`;
             })
@@ -240,16 +236,15 @@ async function getFeed() {
 
         // 유저 네임 클릭 시 해당 유저 프로필로 이동 
         const titlePostList = document.querySelectorAll(".tit-post")
-        console.log(titlePostList)
+        // console.log(titlePostList)
         for (const title of titlePostList) {
-            console.log(title)
+            // console.log(title)
             const authorAccountName = title.dataset.accountname;
-            console.log(authorAccountName)
+            // console.log(authorAccountName)
             title.addEventListener('click', () => {
                 window.location.href = `your_profile.html?accountName=${authorAccountName}`;
             })
         }
-
 
         // 댓글 아이콘 클릭 시 상세 게시물로 이동 
         const goPostPage = document.querySelectorAll(".btn-comment")
@@ -258,15 +253,6 @@ async function getFeed() {
                 window.location.href = `post.html?id=${posts[idx].id}`;
             })
         }
-
-        // 이미지 클릭 시 상세 게시물로 이동
-        // const goPostPage2 = document.querySelectorAll(".article-post__img")
-        // console.log(goPostPage2)
-        // for (const [idx, comment] of goPostPage2.entries()) {
-        //     comment.addEventListener('click', () => {
-        //         window.location.href = `post.html?id=${posts[idx].id}`;
-        //     })
-        // }
 
         // forEach문 밖에서 getFeed() 함수 안에 리스트에 담아둔 버튼들을 DOM에 연결시켜주기
         const contentBtnContList = document.querySelectorAll(".icon-box-heart");
