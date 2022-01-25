@@ -32,10 +32,8 @@ async function createAndDrawFollowDOM() {
 
     // follower 페이지일 경우 following하는 user에게만 취소 버튼을 표시해주기 위해
     // following하는 user의 accountname 리스트를 받아온다.
-    if (followType === "follower") {
-        followingList = await getFollowingList(getQueryValue("accountName"));
-        accountNameList = followingList.map((item) => item.accountname);
-    }
+    followingList = await getFollowingList(getQueryValue("accountName"));
+    accountNameList = followingList.map((item) => item.accountname);
 
     console.log(followData);
     for (let user of followData) {

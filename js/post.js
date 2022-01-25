@@ -87,13 +87,11 @@ async function getPost() {
             const postDom = document.querySelector(".post");
             postDom.innerHTML = `
             <div class="profile">
-                <img src="${
-                    post.author.image
+                <img src="${post.author.image
                 }" alt="프로필 사진" class="profile-pic">
                 <div class="user">
-                    <p data-username="${
-                        post.author.username
-                    }" class="tit-post" >${post.author.username}</p>
+                    <p data-username="${post.author.username
+                }" class="tit-post" >${post.author.username}</p>
                     <p class="user-id font-gray">@${post.author.accountname}</p>
                 </div>
             </div>
@@ -106,23 +104,20 @@ async function getPost() {
                 </ul>
                 <div class="icon-box font-gray">
                     <button type="button" class="btn btn-like">
-                        <img src="./src/png/${
-                            post.hearted
-                                ? "icon-heart-active.png"
-                                : "icon-heart.png"
-                        }" class="heart">
+                        <img src="./src/png/${post.hearted
+                    ? "icon-heart-active.png"
+                    : "icon-heart.png"
+                }" class="heart">
                     </button>
                     <span class="count count-heart">${post.heartCount}</span>
                     <button type="button" class="btn btn-comment"><img src="./src/svg/message-circle.svg"></button>
-                    <span class="count count-comment">${
-                        post.commentCount
-                    }</span>
+                    <span class="count count-comment">${post.commentCount
+                }</span>
                 </div>
                 <p class="date font-gray">${getDateString(post.createdAt)}</p>
             </div>
-            <button class="more-btn2 " data-postid="${post.id}" data-userid="${
-                post.author._id
-            }" >
+            <button class="more-btn2 " data-postid="${post.id}" data-userid="${post.author._id
+                }" >
                 <img src="src/svg/s-icon-more-vertical.svg" alt="더보기" class="icon-more2">
             </button>
             `;
@@ -159,9 +154,8 @@ async function getPost() {
             console.log("indicator: ", indicator);
             if (post.image.split(",").length > 1) {
                 for (let i = 0; i < post.image.split(",").length; i++) {
-                    slides.innerHTML += `<li><img src="${
-                        post.image.split(",")[i]
-                    }" alt="게시글 이미지" class="picture"></li>`;
+                    slides.innerHTML += `<li><img src="${post.image.split(",")[i]
+                        }" alt="게시글 이미지" class="picture"></li>`;
                     indicator.innerHTML += `<li>
                     <button type="button" class="list-slide current">
                     <span class="blind">1번 슬라이드</span>
@@ -362,23 +356,20 @@ async function getComment() {
             res.comments.forEach((comment) => {
                 commentsDom.innerHTML += `
             <div class="comment-view">
-                <img class="profile-pic" src="${
-                    comment.author.image
-                }" alt="내 프로필 이미지">
+                <img class="profile-pic" src="${comment.author.image
+                    }" alt="내 프로필 이미지">
                 <div class="txt-container">
                     <div>
-                        <span class="user-nic" data-accountname="${
-                            comment.author.username
-                        }">${comment.author.username}</span>
+                        <span class="user-nic" data-accountname="${comment.author.username
+                    }">${comment.author.username}</span>
                         <span class="comment-time">${getTimeString(
-                            comment.createdAt
-                        )}</span>
+                        comment.createdAt
+                    )}</span>
                     </div>
                     <p class="comment">${comment.content}</p>
                 </div>
-                <button class="more-btn3" data-commentid = "${
-                    comment.id
-                }" data-userid="${comment.author._id}">
+                <button class="more-btn3" data-commentid = "${comment.id
+                    }" data-userid="${comment.author._id}">
                     <img src="src/svg/s-icon-more-vertical.svg" alt="더보기" class="icon-more2">
                 </button>
             </div> 
@@ -437,9 +428,6 @@ function getCommentMoreBtn() {
 
 // 댓글삭제
 async function commentDel() {
-    // const queryString = window.location.href.split('?')[1]
-    // const searchParams = new URLSearchParams(queryString)
-    // const postId = searchParams.get('id');
     const postId = window.location.href.split("=")[1];
     const alertCommentDelete = document.querySelector(".alert-comment-delete");
     const moreBtn = document.querySelector(".more-btn3");
