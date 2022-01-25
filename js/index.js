@@ -1,7 +1,7 @@
 // 검색 아이콘 클릭 시 페이지 이동
 const goToSearchPage = document.querySelector('.header > button');
 goToSearchPage.addEventListener('click', () => {
-    window.location.href = "search_2.html";
+    window.location.href = "search_1.html";
 })
 
 // 업모달창 사라지기 
@@ -97,7 +97,7 @@ async function getFeed() {
         const goToSearch = document.querySelector(".btnYellow");
         // console.log(goToSearch);
         goToSearch.addEventListener('click', () => {
-            window.location.href = "search_2.html";
+            window.location.href = "search_1.html";
         })
         // 팔로우가 있는 경우 그려줄 화면 
     } else {
