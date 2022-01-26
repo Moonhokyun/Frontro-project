@@ -27,12 +27,12 @@ createAndDrawFollowDOM();
 
 async function createAndDrawFollowDOM() {
     const [followData, followType] = await getFollowData();
+    const myAccountName = localStorage.getItem("accountName");
     let followingList;
     let accountNameList;
 
-    // follower 페이지일 경우 following하는 user에게만 취소 버튼을 표시해주기 위해
-    // following하는 user의 accountname 리스트를 받아온다.
-    followingList = await getFollowingList(getQueryValue("accountName"));
+    // user가 following하는 accountname 리스트를 받아온다.
+    followingList = await getFollowingList(myAccountName);
     accountNameList = followingList.map((item) => item.accountname);
 
     console.log(followData);
@@ -242,3 +242,4 @@ function getQueryValue(key) {
 
 // 1. html tag > 2. css 적용 > 3. js 적용 순으로 html에서 처리할 수 있는 코드를 css로 작성하거나 js로 작성하요 과도한 스펙의 코드를 작성하지 않도록 한다. js보다는 css로 작성하는 것이 좋음!
 // js data attribute
+// follow도 사용자 본인 페이지인지 다른 계정 사용자인
