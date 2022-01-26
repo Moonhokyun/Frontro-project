@@ -27,11 +27,17 @@
 
 ## Product
 
+
+[은이네 문방구 바로가기](https://frontro-project-one.vercel.app/splash_screen.html)
+
+[유튜브](https://www.youtube.com/watch?v=4ioUUzX3cDQ)
+
 [피그마](https://www.figma.com/file/DbwQBUDLWaS783BVhDltfw/%EC%9D%80%EC%9D%B4%EB%84%A4-%EB%AC%B8%EB%B0%A9%EA%B5%AC?node-id=1%3A622)
 
 [포트폴리오](https://www.figma.com/file/rZFavy4TGv5bAXSpAO35lY/%ED%8F%AC%ED%8F%B4-%EC%9D%80%EC%9D%B4%EB%84%A4%EB%AC%B8%EB%B0%A9%EA%B5%AC?node-id=0%3A1)
 
-[은이네 문방구 바로가기]("배포주소")
+
+
 
 
 # 역할
