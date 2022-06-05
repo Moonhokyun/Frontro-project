@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.mandarin.cf";
+const BASE_URL = "https://mandarin.api.weniv.co.kr";
 const ACCOUNT_MYNAME = "hey_binky";
 const MYID = "61ca638ab5c6cd18084e447d";
 const ACCOUNT_NAME = "halo_halo";

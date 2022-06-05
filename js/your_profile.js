@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.mandarin.cf";
+const BASE_URL = "https://mandarin.api.weniv.co.kr";
 
 checkLoginUser();
 
@@ -96,11 +96,8 @@ profileFollowBtn.addEventListener("click", () => {
 // 프로필 데이터 가져오기
 async function getProfileData() {
     try {
-        // const myAccountName = localStorage.getItem("account");
         const accountName = getQueryValue("accountName");
         const myAccountName = localStorage.getItem("accountName");
-
-        console.log(accountName);
         const token = localStorage.getItem("Token");
 
         const followingList = await getFollowingList(myAccountName);
@@ -393,8 +390,15 @@ pictureStyleBtn.addEventListener("click", () => {
 // - content DOM 요소 생성 및 화면 그리기
 createAndDrawContent();
 
-// - content DOM 요소 생성 및 화면 그리기
+// content DOM 요소 생성 및 화면 그리기
+// - 데이터를 api로 가져와 관련된 게시글 DOM을 생성 및 화면에 그려주는 함수입니다.
+// - 데이터가 있어야 화면에 게시글란을 나타내주고 없으면 나타내지 않습니다.
+// - 데이터로 사용자 프로필 사진, 이름, 계정 이름, 이미지, 작성일 DOM을 먼저 생성합니다.
+// - 생성된 DOM은 DocumentFragement에 저장되었다가 한 번에 DOM에 붙여줍니다.
+// - 더보기 버튼, 좋아요 버튼, 댓글 버튼과 같은 이벤트 함수가 필요한 함수들은 따로 DOM 생성을 해주어서 리스트로 관리되고 나중에 DOM에 붙여줍니다.
+// - 더보기 버튼은 클릭 시 이벤트 함수로 밑에서 올라오는 업모달을 띄워주는데 여러 개의 더보기 버튼들이 한 개의 html 업 모달을 공유하면서 이벤트를 달아주기 때문에 중복된 이벤트 함수 등록을 막기 위해 업 모달이 내려갈 때 클릭할 때 달아주었던 이벤트 함수를 제거해줍니다.
 async function createAndDrawContent() {
+    // 데이터 받아오기
     const contentsListData = await getContents();
 
     // 등록된 게시글이 없으면 게시글란 안보이게 처리하기
@@ -404,13 +408,18 @@ async function createAndDrawContent() {
         return;
     }
 
-    // DOM에 붙여줄 버튼들을 리스트로 관리 > filter나 find로 미리 작성할 수 있다? 뭐가 더 좋을까
+    // 게시글 DOM에 붙여줄 버튼들을 리스트로 관리
+    // 원래는 api 요청으로 받아온 데이터를 통해서 innerHTML로 버튼들을 넘겨주려 하였습니다.
+    // 하지만, 아래의 for문 안에서 innerHTML로 넣어주는 DOM 요소에 addEventListener를 작성할 수 없다고 판단하여
+    // 좋아요 버튼이나 더보기 버튼, 댓글 버튼 같이 이벤트 처리가 필요한 요소들은 DOM을 생성 후 이벤트를 달아주고 이를 리스트로 관리하였습니다.
+    // 추후 DocumentFragment에 넣어져 있는 게시글 DOM들이 DOM에 붙인 다음 이 버튼들을 게시글 DOM에 붙여줍니다.
     const btnMoreList = [];
     const btnHeartList = [];
     const btnCommentList = [];
 
-    // 여러 비동기에 쓰이는 await를 한 번으로 묶을 수는 없을까??, class나 생성자 함수로 각 게시물들을 바꿔주면 더 좋을 것 같다.
+    // 받아온 데이터로 for문을 이용하여 게시글 DOM을 하나하나씩 생성하여 DocumentFragment에 붙여주는 부분
     for (let content of contentsListData) {
+        // 단일 이미지, 다중 이미지 처리
         const imageArray = content.image.split(",");
         console.log(imageArray);
         let imageHTML = "";
@@ -428,8 +437,7 @@ async function createAndDrawContent() {
             imageHTML = `<ul class="content-img_slide">${arr.join("")}</ul>`;
         }
 
-        contentId = content.id;
-        // list형 content 보여주기
+        // list형 게시글 DOM 생성
         const contentItem = document.createElement("li");
         contentItem.className += "li_user-contents";
         contentItem.innerHTML = `
@@ -453,18 +461,19 @@ async function createAndDrawContent() {
             </div>
         </article>`;
 
-        // picture-content 노드 생성
-        // 1. 이미지가 있다면 앨범형 콘텐츠 노드 생성
-        // 1.1 이미지가 단일 이미지라면 그냥 이미지 + 클릭하면 post.html으로 이동
-        // 1.2 이미지가 다중 이미지라면 이미지 + 여러장 아이콘 + 클릭하면 post.html으로 이동
+        // 앨범형 게시글 DOM 생성
+        // 1. 이미지가 있다면
+        //    1.1 이미지가 단일 이미지라면 "이미지 + 클릭 이벤트(post.html으로 이동)"인 앨범형 게시글 DOM 생성
+        //    1.2 이미지가 다중 이미지라면 "첫 번째 이미지 + 이미지가 여러장 있음을 표시해주는 아이콘 + 클릭이벤트(post.html으로 이동)"인 앨범형 게시글 DOM 생성
+        // 2. 이미지가 없다면 아무 게시물도 표시하지 않음
         if (imageArray.length >= 1) {
-            // 단일이미지 콘텐츠 생성
+            // 단일이미지 게시글 생성
             if (imageArray[0] && imageArray.length === 1) {
                 const pictureContentItem = document.createElement("li");
                 pictureContentItem.innerHTML = `<a href=post.html?id=${content.id}><img src=${imageArray[0]} alt="post-image" class="content-img_content-info"></a>`;
                 pictureContentsFragment.appendChild(pictureContentItem);
             }
-            // 다중 이미지 콘텐츠 생성
+            // 다중 이미지 게시글 생성
             else if (imageArray[0] && imageArray.length > 1) {
                 const pictureContentItem = document.createElement("li");
                 pictureContentItem.classList.add("multi-image");
@@ -476,20 +485,31 @@ async function createAndDrawContent() {
             }
         }
 
-        // forEach문 돌 때 마다 더보기, 좋아요, 댓글 버튼 생성
+        // forEach문 돌 때 마다 더보기 버튼, 좋아요 버튼, 댓글 버튼 생성
+
         // 더보기 버튼 노드 생성
+        // 더보기 버튼을 누르면 신고하기 버튼 모달이 화면 위로 올라옵니다.( 위로 올라오는 모달을 업모달이라 하겠습니다!)
+        // 또한 업모달의 신고하기 버튼을 클릭하면 생성되는 팝업 모듈에 있는 신고하기 버튼에 이벤트를 달아줍니다. 이 이벤트는 업모달이 내려갈 때 삭제 됩니다!
+        // ※ 각 게시물의 모든 더보기 버튼이 한 개의 html의 신고하기 버튼 모달(업모달)에 이벤트를 달아줘야하기 때문에 이런 식으로 이벤트를 달았다 삭제하는 방식을 선택했습니다!
         const btnMoreHTML = document.createElement("button");
         btnMoreHTML.className += "btn-more_content button-noneBackground";
         btnMoreHTML.innerHTML = `<img class="" src="src/svg/s-icon-more-vertical.svg" alt="더보기 버튼">`;
         btnMoreHTML.addEventListener("click", () => {
+            // 업모달 창을 띄우기
             backgroundUpModal.style.display = "block";
             contentUpModal.style.bottom = "0";
-            // 일회성 이벤트 등록(여러개의 콘텐츠가 하나의 업모달을 공유해서 이벤트를 달기 때문에 일회성 이벤트를 사용)
-            // 상품 삭제 이벤트 등록
+
+            // contentId는 전역변수로 클릭된 게시글의 ID를 저장합니다. 여기서 저장된 변수는 바로 아래의 이벤트 함수인 reportFuncWrapper 안의 reportItem(contentId){} 함수의 인자로 들어가게 됩니다.
+            // createAndDrawContent(지금 실행되는 함수)의 밖에서 이 변수를 사용하기 때문에 전역변수로 사용하였습니다. (이렇게 사용하는게 틀린건 같지만.. 사용했습니다..)
+            contentId = content.id;
+
+            // 일회성 이벤트 등록(여러개의 콘텐츠가 하나의 업모달을 공유해서 이벤트를 달기 때문에 일회성 이벤트를 사용하였습니다. 이 이벤트는 업모달창의 뒷 배경(backgroundUpModal)을 클릭했을 때 제거됩니다.)
+            // 게시글 신고 이벤트 등록
             contentReportBtn_popup.addEventListener("click", reportFuncWrapper);
         });
 
         // 좋아요 버튼 생성
+        // 좋아요 버튼을 생성하고 이벤트 함수를 통해 현재 버튼 활성화 상태에 따라 좋아요 버튼을 활성화 또는 비활성화 합니다.
         const btnHeartHTML = document.createElement("button");
         btnHeartHTML.className += "button-like button-noneBackground";
         btnHeartHTML.innerHTML = `
@@ -499,21 +519,11 @@ async function createAndDrawContent() {
             <strong class="count-heart">${content.heartCount}</strong>
             `;
         btnHeartHTML.addEventListener("click", () => {
-            const token = localStorage.getItem("Token");
-
-            // 하트 활성화에 따라 처리를 다르게
-            // case 1. 하트 활성화
+            // case 1. 하트 활성화되어 있는 상태라면?
             // - hearted true값 false 값으로 바꾸기
             // - countHeart값 -1
             // - img 변경
             // - 해당 게시물의 id로 post 요청
-
-            // case 2. 하트 비활성화
-            // - hearted false값 true 값으로 바꾸기
-            // - countHeart값 +1
-            // - img 변경
-            // - 해당 게시물의 id로 post 요청
-
             if (content.hearted) {
                 content.hearted = false;
                 content.heartCount -= 1;
@@ -526,7 +536,13 @@ async function createAndDrawContent() {
                     content.heartCount,
                     content.image
                 );
-            } else {
+            }
+            // case 2. 하트 비활성화되어 있는 상태라면?
+            // - hearted false값 true 값으로 바꾸기
+            // - countHeart값 +1
+            // - img 변경
+            // - 해당 게시물의 id로 post 요청
+            else {
                 content.hearted = true;
                 content.heartCount += 1;
                 content.image = "./src/png/icon-heart-active.png";
@@ -546,21 +562,22 @@ async function createAndDrawContent() {
         btnCommentHTML.className += "button-comment button-noneBackground";
         btnCommentHTML.innerHTML = `<img src="./src/png/icon-message-circle.png" alt="">
               <strong class="count-comment">${content.commentCount}</strong>`;
-
         btnCommentHTML.addEventListener("click", () => {
             location.href = `post.html?id=${content.id}`;
         });
 
-        // 생성한 버튼들 리스트에 넣어서 관리
+        // 생성한 버튼들 리스트에 넣어서 관리, innerHTML에 addEventListener를 달수 없을 것 같아 이처럼 리스트로 관리해서 나중에 DOM에 붙여줍니다.
         btnMoreList.push(btnMoreHTML);
         btnHeartList.push(btnHeartHTML);
         btnCommentList.push(btnCommentHTML);
+
         contentsFragment.appendChild(contentItem);
     }
     contentsList.appendChild(contentsFragment);
     pictureContentList.appendChild(pictureContentsFragment);
 
-    // content-header_user-contents에 addEventListener 달아주기
+    // 게시글 헤더(프로필 이미지, 사용자이름, 사용자 계정 ID) 클릭 시 profile 페이지로 이동하도록 처리
+    // (content - header_user - contents에 addEventListener 달아주기)
     const contentHeaderList = document.querySelectorAll(
         ".content-header_user-contents"
     );
@@ -586,6 +603,7 @@ async function createAndDrawContent() {
         contentBtnCont.appendChild(btnCommentList[index]);
     });
 
+    // 업 모달의 배경을 클릭하면 더보기 버튼에 달아줬던 click event 삭제
     backgroundUpModal.addEventListener("click", () => {
         contentUpModal.style.bottom = "-20rem";
         contentReportBtn_popup.removeEventListener("click", reportFuncWrapper);
@@ -595,6 +613,7 @@ async function createAndDrawContent() {
 //  신고 이벤트
 async function reportFuncWrapper() {
     console.log("신고! 신고!");
+    console.log(contentId);
     reportItem(contentId);
 }
 async function reportItem(itemId) {
@@ -605,7 +624,7 @@ async function reportItem(itemId) {
     contentPopupModal.style.display = "none";
     contentUpModal.style.bottom = "-20rem";
 
-    // 게시글 삭제 로직...
+    // 게시글 신고 로직
     const res = await myFetch(
         `${BASE_URL}/post/${itemId}/report`,
         "post",
@@ -622,33 +641,6 @@ async function reportItem(itemId) {
         window.alert("신고에 실패하였습니다.");
     }
 }
-// async function reportItem(itemId) {
-//     console.log(itemId);
-//     const token = localStorage.getItem("Token");
-
-//     // 팝업, 업 모달 다 내려주기
-//     backgroundPopupModal.style.display = "none";
-//     backgroundUpModal.style.display = "none";
-//     contentPopupModal.style.display = "none";
-//     contentUpModal.style.bottom = "-20rem";
-
-//     // 게시글 신고 로직...
-//     const res = await myFetch(
-//         `${BASE_URL}/post/${itemId}/report`,
-//         "post",
-//         token,
-//         null
-//     );
-
-//     const response = await res.json();
-
-//     // 게시글 삭제 완료여부 알려주기
-//     if (res.ok) {
-//         window.alert(`response.report.post 게시물을 신고하였습니다.`);
-//     } else {
-//         window.alert("신고 실패하였습니다!");
-//     }
-// }
 
 // 콘텐츠의 데이터를 가져와서 그려주는 함수
 async function getContents() {
@@ -834,16 +826,27 @@ async function myFetch(url, method, auth = "", data = "") {
 
     return responseData;
 }
-// - 페이지 들어올 때 토큰 있는 지 확인
+
+// 페이지 들어올 때 유효한 토큰 있는 지 확인하는 함수
+// 1. 토큰이 없다면 로그인으로 이동
+// 2. 토큰이 있다면 유효한 토큰인지 api 요청을 통해 확인
+// ※ 참고
+//    - token: login 시 localStorage에 저장해놓은 토큰 값
+//    - myFetch: fetch의 중복되는 코드를 작성하지 않기 위해 만든 함수
+//      - myFetch(request url, request method, auth key(optional), request body(optional) data) {...}
+//    - BASE_URL: api 요청에 필요한 base url
 async function checkLoginUser() {
-    // 토큰 검사하는 api 사용해서 수정하기
+    // 1. 토큰이 있는지 확인
     const token = localStorage.getItem("Token");
     if (!token) {
         location.href = "login.html";
     }
-    // 이 부분은 토큰이 만료됐다 싶을 때 다시 테스트 해보기
+
+    // 2. 유효한 토큰인지 확인
+
     const res = await myFetch(`${BASE_URL}/user/checktoken`, "get", token);
     const result = await res.json();
+
     if (!result.isValid) {
         window.alert("만료된 토큰입니다.");
         console.log(result.isValid);
@@ -903,3 +906,7 @@ function makeMoneysComma(money) {
 // 컨텐츠나 프로필 같이 반복적으로 사용되는 것은 클래스나 생성자 함수를 사용해서 구현해보기
 
 // github 이슈 위키등 gitpage를 100% 활용하는 방법 찾아보기
+
+// 신고하기 모달을 띄울 때 이벤트 함수안에서 전역변수를 사용하는데 클릭할 때 값을 받아오면 마지막 컨텐츠를 받아와야할 텐데 어떻게 이벤트 함수를 달아줄 때의 변수를 받아오는지..
+
+// 로그인 시 토큰을 저장하고 클라이언트에서 관리하는 방법

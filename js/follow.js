@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.mandarin.cf";
+const BASE_URL = "https://mandarin.api.weniv.co.kr";
 
 // - top-bar, 헤더 바 -
 
